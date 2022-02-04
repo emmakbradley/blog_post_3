@@ -6,4 +6,35 @@ import scrapy
 class ImdbSpider(scrapy.Spider):
     name = 'imdb_spider'
     
-    start_urls = ['https://www.imdb.com/title/tt0413573/?ref_=nv_sr_srsg_0']
+    start_urls = ['https://www.imdb.com/title/tt0413573/']
+
+    def parse(self, response):
+        
+        next_page = "fullcredits/"
+
+        if next_page:
+            next_page = response.urljoin(next_page)
+            # callback should be the next parse method
+            yield scrapy.Request(next_page, callback = self.parse_full_credits)
+
+    def parse_full_credits(self, response):
+        
+        next_page_list = [a.attrib["href"] for a in response.css("td.primary_photo a")]
+
+        for next_page in next_page_list:
+            next_page = response.urljoin(next_page)
+            yield scrapy.Request(next_page, callback = self.parse_actor_page)
+
+    def parse_actor_page(self, response):
+
+        actor_name = response.css("span.itemprop::text").get()
+        
+        for element in response.css("div.filmo-row"):
+
+
+            yield {
+                "actor" : actor_name,
+                "movie_or_tv_name": movie_or_tv_name,
+            }
+        
+
