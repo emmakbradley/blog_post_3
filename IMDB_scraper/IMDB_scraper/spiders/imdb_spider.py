@@ -30,11 +30,15 @@ class ImdbSpider(scrapy.Spider):
         actor_name = response.css("span.itemprop::text").get()
         
         for element in response.css("div.filmo-row"):
+            element = response.css("b")
+            movie_or_tv_name = element.css("a::text").getall()
 
+            this_title = "Grey's Anatomy"
+            movie_or_tv_name = [a for a in movie_or_tv_name if this_title not in a]
 
-            yield {
-                "actor" : actor_name,
-                "movie_or_tv_name": movie_or_tv_name,
-            }
-        
+        yield {
+            "actor" : actor_name,
+            "movie_or_tv_name": movie_or_tv_name,
+        }
+
 
