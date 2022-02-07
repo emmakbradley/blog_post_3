@@ -89,4 +89,4 @@ ROBOTSTXT_OBEY = True
 
 # prevent spider from downloading too much data while I am still testing it out
 # delete later
-#CLOSESPIDER_PAGECOUNT = 20
+CLOSESPIDER_PAGECOUNT = 20
